@@ -8,3 +8,10 @@ export interface SpaceObjectConfig {
     velocity: THREE.Vector3;
 }
 
+// Types pour les vaisseaux spatiaux
+export interface SpacecraftConfig extends SpaceObjectConfig {
+    fuel: number; // kg
+    engines: EngineConfig[];
+    attitude?: THREE.Quaternion;
+}
+
