@@ -15,3 +15,11 @@ export interface SpacecraftConfig extends SpaceObjectConfig {
     attitude?: THREE.Quaternion;
 }
 
+// Types pour les moteurs
+export interface EngineConfig {
+    type: 'chemical' | 'electric' | 'nuclear';
+    thrust: number; // N
+    isp: number; // Impulsion spécifique en secondes
+    efficiency: number; // Efficacité du moteur (0-1)
+}
+
