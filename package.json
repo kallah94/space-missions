@@ -1,0 +1,22 @@
+{
+  "name": "space-missions",
+  "version": "1.0.0",
+  "description": "Une bibliothèque Three.js complète pour la simulation spatiale",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "webpack --mode production && tsc --emitDeclarationOnly",
+    "build:dev": "webpack --mode development",
+    "dev": "webpack serve --mode development",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "clean": "rm -rf dist"
+  },
+  "keywords": ["space", "three.js", "simulation", "orbital-mechanics", "typescript"],
+  "author": "Moussa FALL",
+  "license": "MIT"
+}
