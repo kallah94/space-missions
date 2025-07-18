@@ -53,5 +53,41 @@ export interface OrbitalElements {
     longitudeOfAscendingNode: number; // radians
     argumentOfPeriapsis: number; // radians
     trueAnomaly: number; // radians
-    epoch: Date; // Date de référence pour les éléments orbitauxg
+    epoch: Date; // Date de référence pour les éléments orbitaux
 }
+
+// Types pour les manœuvres orbitales
+export interface ManeuverConfig {
+    time: number; // Temps de la manœuvre en secondes depuis l'epoch
+    deltaV: THREE.Vector3; // Variation de vitesse m/s
+    duration: number; // Durée de la manœuvre en secondes
+    fuelConsumption: number; // Consommation de carburant en kg
+}
+
+// Types pour la mission
+export interface MissionConfig {
+    name: string;
+    scene: THREE.Scene;
+    camera: THREE.Camera;
+    renderer: THREE.WebGLRenderer;
+    startDate: Date;
+    timeScale?: number; // Facteur d'échelle temporelle pour la simulation
+    duration?: number; // Durée de la mission en secondes
+}
+
+// Types pour l'analyse
+export interface TrajectoryPoint {
+    time: number; // Temps en secondes depuis le début de la simulation
+    position: THREE.Vector3; // Position dans l'espace
+    velocity: THREE.Vector3; // Vitesse dans l'espace
+    orbitalElements?: OrbitalElements; // Éléments orbitaux à ce point
+}
+
+// Types pour les événements spatiaux
+export interface SpaceEvent {
+    type: 'launch' | 'maneuver' | 'collision' | 'communication';
+    timestamp: Date;
+    description: string;
+    involvedObjects: string[]; // Noms des objets spatiaux impliqués
+}
+
