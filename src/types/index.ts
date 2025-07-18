@@ -83,6 +83,47 @@ export interface TrajectoryPoint {
     orbitalElements?: OrbitalElements; // Éléments orbitaux à ce point
 }
 
+export interface CoverageResult {
+    globalCoverage: number; // Pourcentage de couverture globale
+    averageAccessTime: number; // Temps d'accès moyen en secondes
+    accessIntervals: AccessInterval[]; // Intervalles d'accès pour les objets spatiaux
+}
+
+export interface AccessInterval {
+    start: Date; // Date de début de l'accès
+    end: Date; // Date de fin de l'accès
+    maxElevation: number; // Élévation maximale pendant l'accès
+}
+
+
+export interface ConstellationConfig {
+    name: string;
+    orbitalShells: OrbitalShellConfig[];
+    satellite: SpacecraftConfig;
+}
+
+export interface OrbitalShellConfig {
+    altitude: number; // Altitude en km
+    inclination: number; // Inclinaison en degrés
+    satellites: number;
+    planes: number;
+    satellitesPerPlane: number;
+}
+
+export interface SatelliteConfig {
+    mass: number; // kg
+    power: number; // Puissance en watts
+    antennas: AntennaConfig[];
+}
+
+export interface AntennaConfig {
+    type: 'phased_array' | 'parabolic' | 'dipole' | 'horn' | 'helical' | 'dish';
+    frequency: number; // Fréquence en GHz
+    gain?: number; // Gain en dB
+    beamwidth?: number; // Largeur du faisceau en degrés
+}
+
+
 // Types pour les événements spatiaux
 export interface SpaceEvent {
     type: 'launch' | 'maneuver' | 'collision' | 'communication';
@@ -91,3 +132,19 @@ export interface SpaceEvent {
     involvedObjects: string[]; // Noms des objets spatiaux impliqués
 }
 
+export type MissionEvent =
+    | 'launch'
+    | 'maneuver'
+    | 'docking'
+    | 'separation'
+    | 'landing'
+    | 'orbit_insertion'
+    | 'system-failure'
+
+export interface EventCallBack {
+    (event: MissionEvent, data: any): void;
+}
+
+// types utilitaires
+export type Vector3Like = [number, number, number] | THREE.Vector3;
+export type QuaternionLike = [number, number, number, number] | THREE.Quaternion;
