@@ -160,4 +160,18 @@ export class Spacecraft {
         return this.mesh
     }
 
+    /**
+     * Obtient le ratio carburant/masse totale
+     */
+    public getFuelRatio(): number {
+        return this.fuel / (this.masse + this.fuel);
+    }
+
+    /**
+     * Vérifie si le vaisseau peut effectuer une manœuvre
+     */
+    public canExecuteManeuver(maneuver: ManeuverConfig): boolean {
+        const requiredFuel = maneuver.fuelConsumption || 0;
+        return this.fuel >= requiredFuel;
+    }
 }
