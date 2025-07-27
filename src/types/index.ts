@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {Spacecraft, SpaceObject} from "../objects";
 
 // Types de base pour les objects spatiaux
 export interface SpaceObjectConfig {
@@ -144,6 +145,141 @@ export type MissionEvent =
 export interface EventCallBack {
     (event: MissionEvent, data: any): void;
 }
+
+export interface ManeuverSequence {
+    maneuvers: ManeuverConfig[];
+    totalDeltaV: number;
+    duration: number;
+}
+
+export interface PorkChopData {
+    departureWindows: Date[];
+    arrivalWindows: Date[];
+    deltaVMatrix: number[][];
+    flightTimes: number[][];
+}
+
+export interface AccessWindow {
+    start: Date;
+    end: Date;
+    maxElevation: number;
+    azimuthRange: [number, number];
+}
+
+export interface CollisionEvent {
+    object1: SpaceObject;
+    object2: SpaceObject;
+    time: Date;
+    probability: number;
+    missDistance: number;
+}
+
+export interface ConjunctionData {
+    time: Date;
+    distance: number;
+    relativeVelocity: THREE.Vector3;
+    probability: number;
+}
+
+export interface StationModule {
+    name: string;
+    type: 'habitation' | 'laboratory' | 'power' | 'storage';
+    mass: number;
+    volume: number;
+}
+
+export interface DockingPort {
+    id: string;
+    type: 'active' | 'passive';
+    occupied: boolean;
+    dockedVehicle?: Spacecraft;
+}
+
+export interface CargoManifest {
+    food: number;
+    water: number;
+    oxygen: number;
+    fuel: number;
+    equipment: string[];
+}
+
+export interface MineralComposition {
+    water: number;
+    metals: Map<string, number>;
+    rareEarths: Map<string, number>;
+}
+
+export interface ResourceAssessment {
+    totalValue: number;
+    extractionDifficulty: number;
+    accessibilityScore: number;
+}
+
+export interface CommunicationNode {
+    id: string;
+    position: THREE.Vector3;
+    transmitPower: number;
+    antennaGain: number;
+    frequency: number;
+}
+
+export interface CommunicationLink {
+    from: string;
+    to: string;
+    signalStrength: number;
+    latency: number;
+    bandwidth: number;
+}
+
+export interface MessageRoute {
+    path: string[];
+    totalLatency: number;
+    reliability: number;
+}
+
+export interface NetworkGraph {
+    nodes: CommunicationNode[];
+    edges: CommunicationLink[];
+    connectivity: number;
+}
+
+export interface SolarActivity {
+    solarFlareIndex: number;
+    solarWindSpeed: number;
+    coronalMassEjection: boolean;
+}
+
+export interface RadiationExposure {
+    dose: number; // mSv
+    particleFlux: number;
+    shieldingEffectiveness: number;
+}
+
+export interface ThrustProfile {
+    direction: THREE.Vector3;
+    magnitude: number;
+    duration: number;
+    fuelConsumption: number;
+}
+
+export interface SpiralPath {
+    waypoints: THREE.Vector3[];
+    thrustVector: THREE.Vector3[];
+    timeStamps: number[];
+}
+
+
+export interface TimedEvent {
+    time: number;
+    type: string;
+    data: any;
+    source: SpaceObject;
+}
+
+export interface EventCallback {
+    (event: TimedEvent): void;
+}
+
 
 // types utilitaires
 export type Vector3Like = [number, number, number] | THREE.Vector3;
