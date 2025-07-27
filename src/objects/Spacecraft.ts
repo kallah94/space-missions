@@ -63,7 +63,7 @@ export class Spacecraft {
     public updateAttitude(quaternion: THREE.Quaternion): void {
         this.attitude.copy(quaternion);
         if (this.mesh) {
-        this.mesh.quaternion.copy(this.attitude);}
+            this.mesh.quaternion.copy(this.attitude);}
     }
 
     /**
@@ -136,7 +136,44 @@ export class Spacecraft {
      */
     private updateMass(): void {
         // La masse totale = masse à sec + carburant
-        // Cette méthode peut être étendue pour des calculs plus complexes
+        const totalMass = this.masse + this.fuel;
+
+        // Mise à jour des propriétés liées à la masse si nécessaire
+        // Par exemple, moment d'inertie pour les calculs d'attitude
+        this.updateInertia(totalMass);
+
+        // Vérification des limites de carburant
+        if (this.fuel <= 0) {
+            console.warn(`${this.name}: Carburant épuisé!`);
+        }
+    }
+
+    /**
+     * Met à jour le moment d'inertie basé sur la masse totale
+     */
+    private updateInertia(totalMass: number): void {
+        // Calcul simplifié du moment d'inertie pour un cylindre
+        // I = 1/2 * m * r² (approximation pour un vaisseau spatial)
+        // Cette valeur peut être utilisée pour les calculs de rotation
+        const radius = 1.0; // mètres, à ajuster selon la géométrie réelle
+        const momentOfInertia = 0.5 * totalMass * radius * radius;
+
+        // Stockage pour utilisation future dans les calculs d'attitude
+        (this as any).momentOfInertia = momentOfInertia;
+    }
+
+    /**
+     * Obtient la masse totale actuelle
+     */
+    public getTotalMass(): number {
+        return this.masse + this.fuel;
+    }
+
+    /**
+     * Obtient le moment d'inertie actuel
+     */
+    public getMomentOfInertia(): number {
+        return (this as any).momentOfInertia || 0;
     }
 
     /**
@@ -161,6 +198,16 @@ export class Spacecraft {
     }
 
     /**
+     * Met à jour la représentation 3D
+     */
+    public updateMesh(): void {
+        if (this.mesh) {
+            this.mesh.position.copy(this.position);
+            this.mesh.quaternion.copy(this.attitude);
+        }
+    }
+
+    /**
      * Obtient le ratio carburant/masse totale
      */
     public getFuelRatio(): number {
@@ -173,5 +220,32 @@ export class Spacecraft {
     public canExecuteManeuver(maneuver: ManeuverConfig): boolean {
         const requiredFuel = maneuver.fuelConsumption || 0;
         return this.fuel >= requiredFuel;
+    }
+
+    /**
+     * Nettoie les ressources
+     */
+    public dispose(): void {
+        if (this.mesh) {
+            // Nettoyer la géométrie et le matériau
+            if (this.mesh instanceof THREE.Mesh) {
+                this.mesh.geometry.dispose();
+                if (Array.isArray(this.mesh.material)) {
+                    this.mesh.material.forEach(material => material.dispose());
+                } else {
+                    this.mesh.material.dispose();
+                }
+            }
+
+            // Retirer le mesh du parent s'il en a un
+            if (this.mesh.parent) {
+                this.mesh.parent.remove(this.mesh);
+            }
+
+            this.mesh = undefined;
+        }
+
+        // Vider le tableau des manœuvres
+        this.maneuvers.length = 0;
     }
 }
